@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Glowing Card Base */
+.glow-card {
+  @apply relative bg-[#0a0a0f] rounded-2xl p-5 border transition-all duration-300 overflow-hidden;
+  border-color: rgba(79, 70, 229, 0.2);
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.05);
+}
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(6, 182, 212, 0.1), rgba(124, 58, 237, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glow-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79, 70, 229, 0.4);
+  box-shadow: 0 0 50px rgba(79, 70, 229, 0.15), 0 0 100px rgba(79, 70, 229, 0.05);
+}
+
+.glow-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(79, 70, 229, 0.03), transparent 60%);
+  pointer-events: none;
+}
+
+/* New Case Card - Extra Glow */
+.glow-card-new {
+  @apply relative bg-[#0a0a0f] rounded-2xl p-5 border transition-all duration-300 overflow-hidden;
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.08), 0 0 80px rgba(16, 185, 129, 0.04);
+}
+
+.glow-card-new::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glow-card-new:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 60px rgba(16, 185, 129, 0.2), 0 0 120px rgba(16, 185, 129, 0.08);
+}
+
+.glow-card-new::after {
+  content: '✨ NEW';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(16, 185, 129, 0.6);
+  letter-spacing: 0.1em;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* View Modal Card */
+.glow-view-card {
+  @apply relative bg-[#0a0a0f] rounded-2xl p-8 border transition-all duration-300;
+  border-color: rgba(79, 70, 229, 0.3);
+  box-shadow: 0 0 60px rgba(79, 70, 229, 0.15), 0 0 120px rgba(79, 70, 229, 0.08), 0 0 200px rgba(79, 70, 229, 0.04);
+}
+
+.glow-view-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.4), rgba(6, 182, 212, 0.2), rgba(124, 58, 237, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glow-view-card:hover {
+  border-color: rgba(79, 70, 229, 0.5);
+  box-shadow: 0 0 80px rgba(79, 70, 229, 0.2), 0 0 160px rgba(79, 70, 229, 0.1);
+}
+
+/* Status Badges */
+.badge-active {
+  @apply bg-emerald-500/15 text-emerald-400 border-emerald-500/25;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.badge-pending {
+  @apply bg-amber-500/15 text-amber-400 border-amber-500/25;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+}
+
+.badge-closed {
+  @apply bg-gray-500/15 text-gray-400 border-gray-500/25;
+}
+
+/* Priority Badges */
+.priority-high {
+  @apply bg-red-500/15 text-red-400 border-red-500/25;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+}
+
+.priority-urgent {
+  @apply bg-orange-500/15 text-orange-400 border-orange-500/25;
+  box-shadow: 0 0 20px rgba(251, 146, 60, 0.1);
+}
+
+.priority-medium {
+  @apply bg-yellow-500/15 text-yellow-400 border-yellow-500/25;
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.1);
+}
+
+.priority-low {
+  @apply bg-green-500/15 text-green-400 border-green-500/25;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/90 backdrop-blur-lg z-50 flex items-center justify-center p-4;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  @apply bg-[#0a0a0f] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[rgba(79,70,229,0.15)];
+  box-shadow: 0 0 60px rgba(79, 70, 229, 0.1);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.glow-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#0a0a0f];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[rgba(79,70,229,0.3)] rounded-full hover:bg-[rgba(79,70,229,0.5)] transition-colors;
+}
+
+/* Glowing Button */
+.btn-glow {
+  @apply relative px-4 py-2 rounded-lg font-medium transition-all duration-300 overflow-hidden;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  color: #818cf8;
+}
+
+.btn-glow:hover {
+  transform: translateY(-2px);
+  border-color: rgba(79, 70, 229, 0.4);
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.15);
+  color: #a5b4fc;
+}
+
+.btn-glow-primary {
+  @apply relative px-6 py-2.5 rounded-lg font-medium transition-all duration-300 overflow-hidden;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  border: none;
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.2);
+}
+
+.btn-glow-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(79, 70, 229, 0.3), 0 0 100px rgba(79, 70, 229, 0.1);
+}
+
+.btn-glow-danger {
+  @apply relative px-4 py-2 rounded-lg font-medium transition-all duration-300 overflow-hidden;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15));
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.btn-glow-danger:hover {
+  transform: translateY(-2px);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
