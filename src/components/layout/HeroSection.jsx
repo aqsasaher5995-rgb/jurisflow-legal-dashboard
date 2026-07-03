@@ -23,9 +23,7 @@ const HeroSection = ({ stats }) => {
       return () => clearTimeout(timer);
     } else {
       setTypewriterComplete(true);
-      // Show subtitle after main text completes
       setTimeout(() => setShowSubtitle(true), 400);
-      // Show stats after subtitle
       setTimeout(() => setShowStats(true), 1200);
     }
   }, [currentIndex]);
@@ -64,21 +62,24 @@ const HeroSection = ({ stats }) => {
 
   return (
     <div className="relative w-full h-[500px] sm:h-[560px] overflow-hidden">
-      {/* Background Image - Full Screen Expand */}
+      {/* Background Image - Full coverage with no gaps */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url("/court-bg.jpg")',
-          backgroundPosition: 'center 35%',
-          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
         }}
       >
-        {/* Dark Overlay with gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80"></div>
+        {/* Dark Overlay with gradient - ensures text is readable */}
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/75 via-black/60 to-black/75"></div>
+        
+        {/* Additional bottom gradient for smoother transition */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent"></div>
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
+      <div className="relative h-full flex flex-col items-center justify-center px-4 text-center z-10">
         {/* Icon with animation */}
         <div 
           className={`mb-4 transition-all duration-1000 transform ${
