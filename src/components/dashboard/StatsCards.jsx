@@ -7,8 +7,8 @@ const StatsCards = ({ stats }) => {
       title: 'Total Cases',
       value: stats?.total || 0,
       icon: FaFileAlt,
-      color: '#4f46e5',
-      bg: 'bg-indigo-50',
+      color: '#05396B',
+      bg: 'bg-[#05396B]/10',
       trend: '+12%',
       up: true,
     },
@@ -16,8 +16,8 @@ const StatsCards = ({ stats }) => {
       title: 'Active Cases',
       value: stats?.active || 0,
       icon: FaClock,
-      color: '#059669',
-      bg: 'bg-emerald-50',
+      color: '#389583',
+      bg: 'bg-[#389583]/10',
       trend: '+8%',
       up: true,
     },
@@ -44,13 +44,13 @@ const StatsCards = ({ stats }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
       {cards.map((card) => (
-        <div key={card.title} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div key={card.title} className="bg-[#EDF5E0] rounded-xl shadow-sm border border-[#05396B]/15 p-6 hover:shadow-md hover:border-[#05396B]/30 transition-all duration-200">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-500">{card.title}</p>
-              <p className="text-3xl font-bold text-gray-800 mt-2">{card.value}</p>
+              <p className="text-sm font-medium text-[#05396B]">{card.title}</p>
+              <p className="text-3xl font-bold text-[#05396B] mt-2">{card.value}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className={`text-sm font-medium ${card.up ? 'text-emerald-600' : 'text-red-600'}`}>
+                <span className={`text-sm font-medium ${card.up ? 'text-[#389583]' : 'text-red-600'}`}>
                   {card.up ? <FaArrowUp className="inline mr-0.5 text-xs" /> : <FaArrowDown className="inline mr-0.5 text-xs" />}
                   {card.trend}
                 </span>

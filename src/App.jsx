@@ -15,6 +15,8 @@ import ClientsList from './components/clients/ClientsList';
 import CalendarView from './components/calendar/CalendarView';
 import ReportsDashboard from './components/reports/ReportsDashboard';
 import AddReferenceModal from './components/modals/AddReferenceModal';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import { 
   FaPlusCircle, 
   FaEye, 
@@ -23,7 +25,10 @@ import {
   FaDollarSign, 
   FaFileAlt, 
   FaCalendarAlt, 
-  FaGavel 
+  FaGavel,
+  FaSearch,
+  FaClock,
+  FaCheckCircle
 } from 'react-icons/fa';
 
 function App() {
@@ -55,24 +60,64 @@ function App() {
     return cases.filter(c => c.status === 'closed' && solvedCaseIds.includes(c.id));
   }, [cases]);
 
-  const filteredCases = getFilteredCases(activeTab, searchQuery);
+  const filteredCases = useMemo(() => {
+    let filtered = cases;
+
+    if (activeTab !== 'all') {
+      filtered = filtered.filter(c => c.status === activeTab);
+    }
+
+    if (searchQuery && searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(c =>
+        c.caseTitle?.toLowerCase().includes(query) ||
+        c.title?.toLowerCase().includes(query) ||
+        c.caseNumber?.toLowerCase().includes(query) ||
+        c.party?.toLowerCase().includes(query) ||
+        c.description?.toLowerCase().includes(query) ||
+        c.caseType?.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [cases, activeTab, searchQuery]);
+
   const stats = getStats();
 
   const initialCaseIds = ['1', '2', '3', '4', '5', '6'];
   const isNewCase = (caseId) => !initialCaseIds.includes(caseId);
 
   const tabs = [
-    { id: 'all', label: 'All Cases', count: stats.total },
-    { id: 'active', label: 'Active', count: stats.active },
-    { id: 'pending', label: 'Pending', count: stats.pending },
-    { id: 'closed', label: 'Closed', count: stats.closed },
+    { id: 'all', label: 'All Cases', count: filteredCases.length },
+    { id: 'active', label: 'Active', count: filteredCases.filter(c => c.status === 'active').length },
+    { id: 'pending', label: 'Pending', count: filteredCases.filter(c => c.status === 'pending').length },
+    { id: 'closed', label: 'Closed', count: filteredCases.filter(c => c.status === 'closed').length },
   ];
 
   const handleNavigate = (page) => {
     setActivePage(page);
     console.log('Navigating to:', page);
+    
+    if (page === 'profile' || page === 'settings') {
+      return;
+    }
+    
     if (['cases', 'active', 'pending', 'closed', 'solved-cases', 'reference-cases'].includes(page)) {
       setActiveTab(page === 'solved-cases' ? 'solved' : page === 'reference-cases' ? 'reference' : page === 'cases' ? 'all' : page);
+    }
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query && query.trim()) {
+      setActivePage('cases');
+    }
+  };
+
+  const handleHeroSearch = (query) => {
+    setSearchQuery(query);
+    if (query && query.trim()) {
+      setActivePage('cases');
     }
   };
 
@@ -100,9 +145,6 @@ function App() {
     setEvents(events.filter(e => e.id !== eventId));
   };
 
-  // ============================================
-  // Case Handlers
-  // ============================================
   const handleEdit = (caseItem) => {
     console.log('📝 App - Opening edit modal for case:', caseItem?.id);
     setCaseToEdit(caseItem);
@@ -136,21 +178,20 @@ function App() {
     }
   };
 
-  // ============================================
-  // GLOBAL FALLBACK - Make edit available everywhere
-  // ============================================
   window.__editCase = (caseItem) => {
     console.log('🌐 Global edit called for case:', caseItem);
     setCaseToEdit(caseItem);
     setIsEditModalOpen(true);
   };
 
-  // ============================================
-  // Render Content
-  // ============================================
   const renderContent = () => {
-    if (activePage === 'profile') return <Profile />;
-    if (activePage === 'settings') return <Settings />;
+    if (activePage === 'profile') {
+      return <Profile onNavigate={handleNavigate} />;
+    }
+    
+    if (activePage === 'settings') {
+      return <Settings onNavigate={handleNavigate} />;
+    }
 
     if (activePage === 'reference-cases') {
       const filteredReferences = referenceCases.filter(ref =>
@@ -161,20 +202,20 @@ function App() {
       );
 
       return (
-        <div className="bg-[#0a0a0f] rounded-xl border border-[rgba(255,255,255,0.05)] p-6">
+        <div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold text-white">Reference Cases</h2>
-                <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-medium border border-blue-500/20">
+                <h2 className="text-2xl font-bold text-[#1B262C]">Reference Cases</h2>
+                <span className="px-3 py-1 bg-[#3282B8]/10 text-[#0F4C75] rounded-full text-xs font-medium border border-[#3282B8]/20">
                   {referenceCases.length} References
                 </span>
               </div>
-              <p className="text-sm text-gray-400 mt-1">Legal precedents and reference cases for research</p>
+              <p className="text-sm text-[#6B7280] mt-1">Legal precedents and reference cases for research</p>
             </div>
             <button
               onClick={() => setIsAddReferenceModalOpen(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
+              className="flex items-center gap-2 btn-primary px-4 py-2 text-sm font-medium"
             >
               <FaPlusCircle className="text-xs" />
               Add Reference Case
@@ -182,40 +223,60 @@ function App() {
           </div>
           
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search reference cases..." />
+            <div className="relative flex-1 max-w-md">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="h-3.5 w-3.5 text-[#9CA3AF]" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search reference cases..."
+                className="w-full pl-9 pr-3 py-2 bg-white border border-[#BBE1FA] rounded-xl text-sm text-[#1B262C] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-4 focus:ring-[#3282B8]/10 focus:border-[#3282B8] transition-all duration-200"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => handleSearch('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#9CA3AF] hover:text-[#1B262C]"
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
           
-          {/* Reference Cases Grid - 2 columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {filteredReferences.map((caseItem) => (
-              <div key={caseItem.id} className="bg-[#0a0a0f] rounded-xl border border-[rgba(255,255,255,0.05)] p-5 hover:border-[rgba(255,255,255,0.1)] transition-all duration-300">
+              <div key={caseItem.id} className="premium-card hover:-translate-y-1">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-white text-base leading-tight truncate">{caseItem.title}</h3>
+                    <h3 className="font-semibold text-[#1B262C] text-base leading-tight truncate">{caseItem.title}</h3>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span className="text-xs text-gray-500 font-mono">#{caseItem.caseNumber}</span>
-                      <span className="text-xs px-2 py-0.5 bg-[rgba(255,255,255,0.05)] rounded-full text-gray-400 border border-[rgba(255,255,255,0.05)]">
+                      <span className="text-xs text-[#6B7280] font-mono">#{caseItem.caseNumber}</span>
+                      <span className="text-xs px-2 py-0.5 bg-[#3282B8]/10 rounded text-[#0F4C75] border border-[#3282B8]/20">
                         {caseItem.caseType || 'General'}
                       </span>
                     </div>
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium border bg-blue-500/10 text-blue-400 border-blue-500/20 flex-shrink-0 ml-3">
+                  <span className="px-3 py-1 rounded-full text-xs font-medium border bg-[#3282B8]/10 text-[#0F4C75] border-[#3282B8]/20 flex-shrink-0 ml-3">
                     📚 Reference
                   </span>
                 </div>
-                <p className="text-sm text-gray-400 line-clamp-2 mb-3">{caseItem.description}</p>
-                <div className="flex items-center justify-between pt-3 border-t border-[rgba(255,255,255,0.05)]">
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                <p className="text-sm text-[#6B7280] line-clamp-2 mb-3">{caseItem.description}</p>
+                <div className="flex items-center justify-between pt-3 border-t border-[#BBE1FA]">
+                  <div className="flex items-center gap-2 text-xs text-[#6B7280]">
                     <span className="flex items-center gap-1">
-                      <FaCalendarAlt className="text-[10px]" />
+                      <FaCalendarAlt className="text-[10px] text-[#0F4C75]" />
                       {caseItem.date ? new Date(caseItem.date).toLocaleDateString() : 'N/A'}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => setSelectedCase(caseItem)} className="p-1.5 text-blue-400 hover:text-blue-300 hover:bg-[rgba(79,70,229,0.15)] rounded-lg transition-all">
+                    <button onClick={() => setSelectedCase(caseItem)} className="p-1.5 text-[#1B262C] hover:text-[#0F4C75] hover:bg-[#3282B8]/10 rounded-lg transition-all">
                       <FaEye className="text-sm" />
                     </button>
-                    <button onClick={() => handleDeleteReferenceCase(caseItem.id)} className="p-1.5 text-red-400 hover:text-red-300 hover:bg-[rgba(239,68,68,0.15)] rounded-lg transition-all">
+                    <button onClick={() => handleDeleteReferenceCase(caseItem.id)} className="p-1.5 text-[#EF4444] hover:text-[#EF4444]/80 hover:bg-[#EF4444]/10 rounded-lg transition-all">
                       <FaTrash className="text-sm" />
                     </button>
                   </div>
@@ -228,8 +289,8 @@ function App() {
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
                 <div className="text-6xl mb-4">📚</div>
-                <h3 className="text-lg font-semibold text-white mb-1">No reference cases found</h3>
-                <p className="text-gray-400 text-sm">{searchQuery ? 'Try adjusting your search' : 'Add reference cases for legal research'}</p>
+                <h3 className="text-lg font-semibold text-[#1B262C] mb-1">No reference cases found</h3>
+                <p className="text-[#6B7280] text-sm">{searchQuery ? 'Try adjusting your search' : 'Add reference cases for legal research'}</p>
               </div>
             </div>
           )}
@@ -239,22 +300,42 @@ function App() {
 
     if (activePage === 'solved-cases') {
       return (
-        <div className="bg-[#0a0a0f] rounded-xl border border-[rgba(255,255,255,0.05)] p-6">
+        <div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold text-white">Solved Cases</h2>
-                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs font-medium border border-emerald-500/20">
+                <h2 className="text-2xl font-bold text-[#1B262C]">Solved Cases</h2>
+                <span className="px-3 py-1 bg-[#22C55E]/10 text-[#22C55E] rounded-full text-xs font-medium border border-[#22C55E]/20">
                   {solvedCases.length} Solved
                 </span>
               </div>
-              <p className="text-sm text-gray-400 mt-1">Cases resolved by other lawyers</p>
+              <p className="text-sm text-[#6B7280] mt-1">Cases resolved by other lawyers</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search solved cases..." />
+            <div className="relative flex-1 max-w-md">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="h-3.5 w-3.5 text-[#9CA3AF]" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search solved cases..."
+                className="w-full pl-9 pr-3 py-2 bg-white border border-[#BBE1FA] rounded-xl text-sm text-[#1B262C] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-4 focus:ring-[#3282B8]/10 focus:border-[#3282B8]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => handleSearch('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#9CA3AF] hover:text-[#1B262C]"
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
-          {/* Solved Cases Grid - 2 columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {solvedCases.map((caseItem) => (
               <CaseCard
@@ -272,7 +353,7 @@ function App() {
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
                 <div className="text-6xl mb-4">✅</div>
-                <h3 className="text-lg font-semibold text-white mb-1">No solved cases</h3>
+                <h3 className="text-lg font-semibold text-[#1B262C] mb-1">No solved cases</h3>
               </div>
             </div>
           )}
@@ -283,26 +364,72 @@ function App() {
     switch (activePage) {
       case 'dashboard':
         return (
-          <div className="bg-[#0a0a0f] rounded-xl border border-[rgba(255,255,255,0.05)] p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-white">All Cases</h2>
-                <p className="text-sm text-gray-400 mt-1">Manage and track your legal cases</p>
+                <h2 className="text-xl font-bold text-[#1B262C]">All Cases</h2>
+                <p className="text-xs text-[#6B7280]">Manage and track your legal cases</p>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-gray-400">Total: <span className="text-white font-bold">{stats.total}</span></span>
-                <span className="text-gray-600">|</span>
-                <span className="text-emerald-400">{stats.active} active</span>
-                <span className="text-gray-600">|</span>
-                <span className="text-amber-400">{stats.pending} pending</span>
-                <span className="text-gray-600">|</span>
-                <span className="text-gray-400">{stats.closed} closed</span>
+              
+              {/* Stats - Deep Current Theme */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 bg-[#1B262C]/10 px-3 py-1.5 rounded-xl border border-[#1B262C]/20">
+                  <FaFileAlt className="text-[#1B262C] text-[10px]" />
+                  <span className="text-[10px] text-[#6B7280]">Total</span>
+                  <span className="text-xs font-bold text-[#1B262C]">{stats.total}</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-[#0F4C75]/10 px-3 py-1.5 rounded-xl border border-[#0F4C75]/20">
+                  <FaGavel className="text-[#0F4C75] text-[10px]" />
+                  <span className="text-[10px] text-[#6B7280]">Active</span>
+                  <span className="text-xs font-bold text-[#0F4C75]">{stats.active}</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-[#F59E0B]/10 px-3 py-1.5 rounded-xl border border-[#F59E0B]/20">
+                  <FaClock className="text-[#F59E0B] text-[10px]" />
+                  <span className="text-[10px] text-[#6B7280]">Pending</span>
+                  <span className="text-xs font-bold text-[#F59E0B]">{stats.pending}</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-[#9CA3AF]/10 px-3 py-1.5 rounded-xl border border-[#9CA3AF]/20">
+                  <FaCheckCircle className="text-[#6B7280] text-[10px]" />
+                  <span className="text-[10px] text-[#6B7280]">Closed</span>
+                  <span className="text-xs font-bold text-[#6B7280]">{stats.closed}</span>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-              <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search cases..." />
+
+            {/* Search Bar */}
+            <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
+              <div className="relative flex-1 max-w-md">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaSearch className="h-3.5 w-3.5 text-[#9CA3AF]" />
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search cases..."
+                  className="w-full pl-9 pr-3 py-2 bg-white border border-[#BBE1FA] rounded-xl text-sm text-[#1B262C] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-4 focus:ring-[#3282B8]/10 focus:border-[#3282B8] transition-all duration-200"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => handleSearch('')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#9CA3AF] hover:text-[#1B262C]"
+                  >
+                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              <TabNavigation tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+              {searchQuery && (
+                <span className="text-xs text-[#6B7280] whitespace-nowrap">
+                  {filteredCases.length} result{filteredCases.length !== 1 ? 's' : ''}
+                </span>
+              )}
             </div>
-            {/* Dashboard Grid - 2 columns */}
+
+            {/* ===== CASES GRID WITH NEW BACKGROUND ===== */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {filteredCases.map((caseItem) => (
                 <CaseCard
@@ -316,12 +443,23 @@ function App() {
                 />
               ))}
             </div>
+            
             {filteredCases.length === 0 && (
-              <div className="text-center py-16">
+              <div className="text-center py-12">
                 <div className="max-w-md mx-auto">
-                  <div className="text-6xl mb-4">📋</div>
-                  <h3 className="text-lg font-semibold text-white mb-1">No cases found</h3>
-                  <p className="text-gray-400 text-sm">Try adjusting your search or filters</p>
+                  <div className="text-5xl mb-3">🔍</div>
+                  <h3 className="text-base font-semibold text-[#1B262C] mb-1">No cases found</h3>
+                  <p className="text-sm text-[#6B7280]">
+                    {searchQuery ? `No results found for "${searchQuery}"` : 'Try adjusting your search or filters'}
+                  </p>
+                  {searchQuery && (
+                    <button
+                      onClick={() => handleSearch('')}
+                      className="mt-3 text-sm text-[#0F4C75] hover:text-[#3282B8] transition-colors font-medium"
+                    >
+                      Clear search
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -333,24 +471,52 @@ function App() {
       case 'pending':
       case 'closed':
         return (
-          <div className="bg-[#0a0a0f] rounded-xl border border-[rgba(255,255,255,0.05)] p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-xl font-bold text-[#1B262C]">
                   {activePage === 'cases' ? 'All Cases' : 
                    activePage === 'active' ? 'Active Cases' :
                    activePage === 'pending' ? 'Pending Cases' : 'Closed Cases'}
                 </h2>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-xs text-[#6B7280]">
                   {filteredCases.length} case{filteredCases.length !== 1 ? 's' : ''} found
                 </p>
               </div>
               <TabNavigation tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-              <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search cases..." />
+            
+            <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
+              <div className="relative flex-1 max-w-md">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaSearch className="h-3.5 w-3.5 text-[#9CA3AF]" />
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search cases..."
+                  className="w-full pl-9 pr-3 py-2 bg-white border border-[#BBE1FA] rounded-xl text-sm text-[#1B262C] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-4 focus:ring-[#3282B8]/10 focus:border-[#3282B8]"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => handleSearch('')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#9CA3AF] hover:text-[#1B262C]"
+                  >
+                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              {searchQuery && (
+                <span className="text-xs text-[#6B7280] whitespace-nowrap">
+                  {filteredCases.length} result{filteredCases.length !== 1 ? 's' : ''}
+                </span>
+              )}
             </div>
-            {/* Cases Grid - 2 columns */}
+
+            {/* ===== CASES GRID WITH NEW BACKGROUND ===== */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {filteredCases.map((caseItem) => (
                 <CaseCard
@@ -364,12 +530,23 @@ function App() {
                 />
               ))}
             </div>
+            
             {filteredCases.length === 0 && (
-              <div className="text-center py-16">
+              <div className="text-center py-12">
                 <div className="max-w-md mx-auto">
-                  <div className="text-6xl mb-4">📋</div>
-                  <h3 className="text-lg font-semibold text-white mb-1">No cases found</h3>
-                  <p className="text-gray-400 text-sm">Start by adding a new case</p>
+                  <div className="text-5xl mb-3">🔍</div>
+                  <h3 className="text-base font-semibold text-[#1B262C] mb-1">No cases found</h3>
+                  <p className="text-sm text-[#6B7280]">
+                    {searchQuery ? `No results for "${searchQuery}"` : 'Start by adding a new case'}
+                  </p>
+                  {searchQuery && (
+                    <button
+                      onClick={() => handleSearch('')}
+                      className="mt-3 text-sm text-[#0F4C75] hover:text-[#3282B8] transition-colors font-medium"
+                    >
+                      Clear search
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -401,15 +578,19 @@ function App() {
       
       default:
         return (
-          <div className="bg-[#0a0a0f] rounded-xl border border-[rgba(255,255,255,0.05)] p-12 text-center">
-            <h3 className="text-2xl font-semibold text-white">Page not found</h3>
+          <div className="bg-white rounded-2xl border border-[#BBE1FA] shadow-premium p-12 text-center">
+            <h3 className="text-xl font-semibold text-[#1B262C]">Page not found</h3>
           </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    // ===== UPDATED MAIN BACKGROUND =====
+    <div className="min-h-screen bg-gradient-to-br from-[#F0F4F8] via-[#F0F4F8] to-[#BBE1FA]/20 flex flex-col">
+      {/* Premium Top Accent Bar - Deep Current */}
+      <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-gradient-to-r from-[#1B262C] via-[#0F4C75] to-[#3282B8]"></div>
+      
       <Header 
         onAddClick={() => setIsAddModalOpen(true)}
         stats={stats}
@@ -420,9 +601,14 @@ function App() {
         referenceCases={referenceCases}
       />
 
-      {activePage === 'dashboard' && <HeroSection stats={stats} />}
+      {activePage === 'dashboard' && (
+        <HeroSection 
+          stats={stats} 
+          onSearch={handleHeroSearch}
+        />
+      )}
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
         {renderContent()}
       </main>
 

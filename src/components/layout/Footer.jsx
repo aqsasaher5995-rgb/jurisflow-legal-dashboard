@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   FaTwitter, FaLinkedin, FaGithub, FaEnvelope,
@@ -17,7 +16,7 @@ import {
   FaUserShield, FaGavel as FaGavelIcon,
   FaTimes, FaCopy, FaStar, FaUser, FaCreditCard, FaCog,
   FaFileContract as FaTerms,
-  FaBullseye  // ← Added FaBullseye
+  FaBullseye
 } from 'react-icons/fa';
 import { GiScales } from 'react-icons/gi';
 
@@ -32,13 +31,11 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
 
   const currentYear = new Date().getFullYear();
 
-  // Show toast notification
   const showToast = (message) => {
     setToastMessage({ message });
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // Show/hide back to top button
   useEffect(() => {
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 300);
@@ -47,7 +44,6 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Navigation handler
   const handleNavigation = (path) => {
     if (onNavigate && typeof onNavigate === 'function') {
       onNavigate(path);
@@ -56,12 +52,10 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     }
   };
 
-  // Scroll to top
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Newsletter subscription
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
     if (newsletterEmail) {
@@ -71,10 +65,6 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     }
   };
 
-  // ============================================
-  // SUPPORT INNER BUTTONS
-  // ============================================
-  
   const handleSupportItemClick = (item, category) => {
     const actionMap = {
       'Getting Started Guide': '📖 Opening Getting Started Guide...',
@@ -119,10 +109,6 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     });
   };
 
-  // ============================================
-  // LEGAL BUTTON HANDLERS
-  // ============================================
-  
   const handleLegalClick = (action) => {
     const data = legalData[action];
     if (data) {
@@ -172,7 +158,6 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     }
   };
 
-  // Close support/legal info when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest('.support-section') && !e.target.closest('.legal-section')) {
@@ -184,18 +169,14 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  // ============================================
-  // SUPPORT DATA
-  // ============================================
-  
   const supportData = {
     'Help Center': {
       title: 'Help Center',
       description: 'Find answers to common questions and get help with JurisFlow.',
       icon: FaHeadset,
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/20',
+      color: 'text-[#3282B8]',
+      bg: 'bg-[#3282B8]/10',
+      border: 'border-[#3282B8]/30',
       items: [
         { icon: FaBook, label: 'Getting Started Guide' },
         { icon: FaVideo, label: 'Video Tutorials' },
@@ -208,9 +189,9 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
       title: 'Documentation',
       description: 'Comprehensive documentation for JurisFlow features and APIs.',
       icon: FaBookOpen,
-      color: 'text-purple-400',
-      bg: 'bg-purple-500/10',
-      border: 'border-purple-500/20',
+      color: 'text-[#3282B8]',
+      bg: 'bg-[#3282B8]/10',
+      border: 'border-[#3282B8]/30',
       items: [
         { icon: FaFilePdf, label: 'User Manual (PDF)' },
         { icon: FaFileCode, label: 'API Documentation' },
@@ -223,9 +204,9 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
       title: 'API Reference',
       description: 'Complete API reference for developers integrating with JurisFlow.',
       icon: FaCode,
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-500/10',
-      border: 'border-emerald-500/20',
+      color: 'text-[#3282B8]',
+      bg: 'bg-[#3282B8]/10',
+      border: 'border-[#3282B8]/30',
       items: [
         { icon: FaKey, label: 'Authentication Guide' },
         { icon: FaGlobeIcon, label: 'Endpoints Reference' },
@@ -238,9 +219,9 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
       title: 'System Status',
       description: 'Real-time status of JurisFlow services and infrastructure.',
       icon: FaServer,
-      color: 'text-green-400',
-      bg: 'bg-green-500/10',
-      border: 'border-green-500/20',
+      color: 'text-[#22C55E]',
+      bg: 'bg-[#22C55E]/10',
+      border: 'border-[#22C55E]/20',
       status: 'All Systems Operational',
       items: [
         { icon: FaCheckCircle, label: 'API Services: Operational' },
@@ -252,18 +233,14 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     },
   };
 
-  // ============================================
-  // LEGAL DATA
-  // ============================================
-  
   const legalData = {
     'Privacy Policy': {
       title: 'Privacy Policy',
       description: 'How JurisFlow collects, uses, and protects your personal data.',
       icon: FaShieldAlt,
-      color: 'text-indigo-400',
-      bg: 'bg-indigo-500/10',
-      border: 'border-indigo-500/20',
+      color: 'text-[#3282B8]',
+      bg: 'bg-[#3282B8]/10',
+      border: 'border-[#3282B8]/30',
       items: [
         { icon: FaFileAlt, label: 'Data Collection Practices' },
         { icon: FaFileAlt, label: 'Data Usage and Sharing' },
@@ -276,9 +253,9 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
       title: 'Terms of Service',
       description: 'Terms and conditions for using JurisFlow services.',
       icon: FaTerms,
-      color: 'text-amber-400',
-      bg: 'bg-amber-500/10',
-      border: 'border-amber-500/20',
+      color: 'text-[#3282B8]',
+      bg: 'bg-[#3282B8]/10',
+      border: 'border-[#3282B8]/30',
       items: [
         { icon: FaFileContract, label: 'Acceptance of Terms' },
         { icon: FaUser, label: 'User Account Terms' },
@@ -291,30 +268,67 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
       title: 'Cookie Policy',
       description: 'How JurisFlow uses cookies and similar tracking technologies.',
       icon: FaCookie,
-      color: 'text-rose-400',
-      bg: 'bg-rose-500/10',
-      border: 'border-rose-500/20',
+      color: 'text-[#3282B8]',
+      bg: 'bg-[#3282B8]/10',
+      border: 'border-[#3282B8]/30',
       items: [
         { icon: FaCookie, label: 'Essential Cookies' },
         { icon: FaChartBar, label: 'Analytics Cookies' },
-        { icon: FaBullseye, label: 'Marketing Cookies' },  // ← Fixed: FaBullseye
+        { icon: FaBullseye, label: 'Marketing Cookies' },
         { icon: FaCog, label: 'Cookie Consent Management' },
         { icon: FaGlobeIcon, label: 'Third-Party Cookie Policy' },
       ]
     },
   };
 
-  // Social media links
+  // ============================================
+  // SOCIAL LINKS WITH BRAND COLORS
+  // ============================================
   const socialLinks = [
-    { icon: FaTwitter, label: 'Twitter', url: 'https://twitter.com', color: 'hover:text-[#1DA1F2]' },
-    { icon: FaLinkedin, label: 'LinkedIn', url: 'https://linkedin.com', color: 'hover:text-[#0A66C2]' },
-    { icon: FaFacebook, label: 'Facebook', url: 'https://facebook.com', color: 'hover:text-[#1877F2]' },
-    { icon: FaInstagram, label: 'Instagram', url: 'https://instagram.com', color: 'hover:text-[#E4405F]' },
-    { icon: FaYoutube, label: 'YouTube', url: 'https://youtube.com', color: 'hover:text-[#FF0000]' },
-    { icon: FaGithub, label: 'GitHub', url: 'https://github.com', color: 'hover:text-[#FFFFFF]' },
+    { 
+      icon: FaTwitter, 
+      label: 'Twitter', 
+      url: 'https://twitter.com', 
+      brandColor: '#1DA1F2',
+      hoverBg: '#1DA1F2'
+    },
+    { 
+      icon: FaLinkedin, 
+      label: 'LinkedIn', 
+      url: 'https://linkedin.com', 
+      brandColor: '#0A66C2',
+      hoverBg: '#0A66C2'
+    },
+    { 
+      icon: FaFacebook, 
+      label: 'Facebook', 
+      url: 'https://facebook.com', 
+      brandColor: '#1877F2',
+      hoverBg: '#1877F2'
+    },
+    { 
+      icon: FaInstagram, 
+      label: 'Instagram', 
+      url: 'https://instagram.com', 
+      brandColor: '#E4405F',
+      hoverBg: '#E4405F'
+    },
+    { 
+      icon: FaYoutube, 
+      label: 'YouTube', 
+      url: 'https://youtube.com', 
+      brandColor: '#FF0000',
+      hoverBg: '#FF0000'
+    },
+    { 
+      icon: FaGithub, 
+      label: 'GitHub', 
+      url: 'https://github.com', 
+      brandColor: '#333333',
+      hoverBg: '#333333'
+    },
   ];
 
-  // Quick links
   const quickLinks = [
     { label: 'Dashboard', path: 'dashboard', icon: FaHome },
     { label: 'All Cases', path: 'cases', icon: FaGavel },
@@ -324,7 +338,6 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     { label: 'Reports', path: 'reports', icon: FaChartBar },
   ];
 
-  // Support links
   const supportLinks = [
     { label: 'Help Center', icon: FaHeadset, action: 'Help Center' },
     { label: 'Documentation', icon: FaBookOpen, action: 'Documentation' },
@@ -332,14 +345,12 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     { label: 'System Status', icon: FaServer, action: 'System Status', status: 'online' },
   ];
 
-  // Legal links
   const legalLinks = [
     { label: 'Privacy Policy', icon: FaShieldAlt, action: 'Privacy Policy' },
     { label: 'Terms of Service', icon: FaTerms, action: 'Terms of Service' },
     { label: 'Cookie Policy', icon: FaCookie, action: 'Cookie Policy' },
   ];
 
-  // Contact info
   const contactInfo = [
     { icon: FaMapMarkerAlt, text: '123 Legal Street, Suite 100, New York, NY 10001' },
     { icon: FaPhone, text: '+1 (555) 123-4567', link: 'tel:+15551234567' },
@@ -347,23 +358,20 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
     { icon: FaClock, text: 'Mon - Fri: 9:00 AM - 6:00 PM' },
   ];
 
-  // ============================================
-  // SUPPORT DETAIL POPUP
-  // ============================================
   const SupportDetail = ({ action }) => {
     const data = supportData[action];
     if (!data || activeSupport !== action) return null;
 
     return (
-      <div className="absolute bottom-full left-0 mb-2 w-80 bg-[#1a1a2e] rounded-xl border border-white/10 shadow-2xl shadow-black/50 p-4 z-50 support-section max-h-[400px] overflow-y-auto">
+      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-[#3282B8] shadow-premium-lg p-4 z-50 support-section max-h-[400px] overflow-y-auto">
         <div className={`flex items-center gap-2 mb-2 ${data.color}`}>
           <data.icon className="text-lg" />
-          <h4 className="font-semibold text-white">{data.title}</h4>
+          <h4 className="font-semibold text-[#1B262C]">{data.title}</h4>
         </div>
-        <p className="text-xs text-gray-400 mb-3">{data.description}</p>
+        <p className="text-xs text-[#6B7280] mb-3">{data.description}</p>
         {data.status && (
-          <div className="flex items-center gap-2 mb-2 text-xs text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg">
-            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+          <div className="flex items-center gap-2 mb-2 text-xs text-[#22C55E] bg-[#22C55E]/10 px-2 py-1 rounded-lg border border-[#22C55E]/20">
+            <span className="w-1.5 h-1.5 bg-[#22C55E] rounded-full animate-pulse"></span>
             {data.status}
           </div>
         )}
@@ -372,14 +380,14 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
             <li key={idx} className="flex items-center justify-between group">
               <button
                 onClick={() => handleSupportItemClick(item.label, data.title)}
-                className="text-xs text-gray-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer flex-1 text-left py-0.5 hover:bg-[rgba(79,70,229,0.1)] rounded px-1"
+                className="text-xs text-[#6B7280] hover:text-[#0F4C75] transition-colors flex items-center gap-1.5 cursor-pointer flex-1 text-left py-0.5 hover:bg-[#3282B8]/10 rounded px-1"
               >
-                <item.icon className="text-[10px] text-gray-500" />
+                <item.icon className="text-[10px] text-[#9CA3AF]" />
                 {item.label}
               </button>
               <button
                 onClick={() => handleCopySupport(item.label)}
-                className="text-[9px] text-gray-500 hover:text-[#818cf8] transition-colors opacity-0 group-hover:opacity-100 px-1"
+                className="text-[9px] text-[#9CA3AF] hover:text-[#0F4C75] transition-colors opacity-0 group-hover:opacity-100 px-1"
                 title="Copy"
               >
                 <FaCopy className="text-[8px]" />
@@ -387,58 +395,55 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
             </li>
           ))}
         </ul>
-        <div className="mt-3 pt-2 border-t border-white/5 flex gap-2">
+        <div className="mt-3 pt-2 border-t border-[#BBE1FA] flex gap-2">
           <button 
             onClick={() => handleOpenSupport(data.title)}
-            className="flex-1 text-[10px] text-[#818cf8] hover:text-white transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[rgba(79,70,229,0.1)] rounded-lg hover:bg-[rgba(79,70,229,0.2)]"
+            className="flex-1 text-[10px] text-[#1B262C] hover:text-[#0F4C75] transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[#3282B8]/10 rounded-lg hover:bg-[#3282B8]/20"
           >
             <FaExternalLinkAlt className="text-[8px]" /> Open
           </button>
           <button 
             onClick={() => handleDownloadSupport(data.title)}
-            className="flex-1 text-[10px] text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
+            className="flex-1 text-[10px] text-[#6B7280] hover:text-[#0F4C75] transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[#F0F4F8] rounded-lg hover:bg-[#3282B8]/20"
           >
             <FaDownload className="text-[8px]" /> Download
           </button>
           <button 
             onClick={() => showToast(`📋 Copied ${data.title} link`)}
-            className="flex-1 text-[10px] text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
+            className="flex-1 text-[10px] text-[#6B7280] hover:text-[#0F4C75] transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[#F0F4F8] rounded-lg hover:bg-[#3282B8]/20"
           >
             <FaCopy className="text-[8px]" /> Copy
           </button>
         </div>
-        <div className="absolute -bottom-1.5 left-6 w-3 h-3 bg-[#1a1a2e] border-r border-b border-white/10 rotate-45"></div>
+        <div className="absolute -bottom-1.5 left-6 w-3 h-3 bg-white border-r border-b border-[#3282B8] rotate-45"></div>
       </div>
     );
   };
 
-  // ============================================
-  // LEGAL DETAIL POPUP
-  // ============================================
   const LegalDetail = ({ action }) => {
     const data = legalData[action];
     if (!data || activeLegal !== action) return null;
 
     return (
-      <div className="absolute bottom-full left-0 mb-2 w-80 bg-[#1a1a2e] rounded-xl border border-white/10 shadow-2xl shadow-black/50 p-4 z-50 legal-section max-h-[400px] overflow-y-auto">
+      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-[#3282B8] shadow-premium-lg p-4 z-50 legal-section max-h-[400px] overflow-y-auto">
         <div className={`flex items-center gap-2 mb-2 ${data.color}`}>
           <data.icon className="text-lg" />
-          <h4 className="font-semibold text-white">{data.title}</h4>
+          <h4 className="font-semibold text-[#1B262C]">{data.title}</h4>
         </div>
-        <p className="text-xs text-gray-400 mb-3">{data.description}</p>
+        <p className="text-xs text-[#6B7280] mb-3">{data.description}</p>
         <ul className="space-y-1.5">
           {data.items.map((item, idx) => (
             <li key={idx} className="flex items-center justify-between group">
               <button
                 onClick={() => handleLegalItemClick(item.label, data.title)}
-                className="text-xs text-gray-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer flex-1 text-left py-0.5 hover:bg-[rgba(79,70,229,0.1)] rounded px-1"
+                className="text-xs text-[#6B7280] hover:text-[#0F4C75] transition-colors flex items-center gap-1.5 cursor-pointer flex-1 text-left py-0.5 hover:bg-[#3282B8]/10 rounded px-1"
               >
-                <item.icon className="text-[10px] text-gray-500" />
+                <item.icon className="text-[10px] text-[#9CA3AF]" />
                 {item.label}
               </button>
               <button
                 onClick={() => handleCopySupport(item.label)}
-                className="text-[9px] text-gray-500 hover:text-[#818cf8] transition-colors opacity-0 group-hover:opacity-100 px-1"
+                className="text-[9px] text-[#9CA3AF] hover:text-[#0F4C75] transition-colors opacity-0 group-hover:opacity-100 px-1"
                 title="Copy"
               >
                 <FaCopy className="text-[8px]" />
@@ -446,70 +451,75 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
             </li>
           ))}
         </ul>
-        <div className="mt-3 pt-2 border-t border-white/5 flex gap-2">
+        <div className="mt-3 pt-2 border-t border-[#BBE1FA] flex gap-2">
           <button 
             onClick={() => handleOpenLegal(data.title)}
-            className="flex-1 text-[10px] text-[#818cf8] hover:text-white transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[rgba(79,70,229,0.1)] rounded-lg hover:bg-[rgba(79,70,229,0.2)]"
+            className="flex-1 text-[10px] text-[#1B262C] hover:text-[#0F4C75] transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[#3282B8]/10 rounded-lg hover:bg-[#3282B8]/20"
           >
             <FaExternalLinkAlt className="text-[8px]" /> Open
           </button>
           <button 
             onClick={() => handleDownloadLegal(data.title)}
-            className="flex-1 text-[10px] text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
+            className="flex-1 text-[10px] text-[#6B7280] hover:text-[#0F4C75] transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[#F0F4F8] rounded-lg hover:bg-[#3282B8]/20"
           >
             <FaDownload className="text-[8px]" /> Download
           </button>
           <button 
             onClick={() => showToast(`📋 Copied ${data.title} link`)}
-            className="flex-1 text-[10px] text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:bg-[rgba(255,255,255,0.1)]"
+            className="flex-1 text-[10px] text-[#6B7280] hover:text-[#0F4C75] transition-colors flex items-center justify-center gap-1 py-1.5 px-2 bg-[#F0F4F8] rounded-lg hover:bg-[#3282B8]/20"
           >
             <FaCopy className="text-[8px]" /> Copy
           </button>
         </div>
-        <div className="absolute -bottom-1.5 left-6 w-3 h-3 bg-[#1a1a2e] border-r border-b border-white/10 rotate-45"></div>
+        <div className="absolute -bottom-1.5 left-6 w-3 h-3 bg-white border-r border-b border-[#3282B8] rotate-45"></div>
       </div>
     );
   };
 
-  // Toast notification
   const ToastNotification = () => {
     if (!toastMessage) return null;
     return (
-      <div className="fixed bottom-24 right-6 z-[9999] px-4 py-2.5 bg-[#1a1a2e] border border-white/10 rounded-xl shadow-2xl shadow-black/50 text-sm text-white animate-in slide-in-from-right duration-300 flex items-center gap-2">
+      <div className="fixed bottom-24 right-6 z-[9999] px-4 py-2.5 bg-white border border-[#3282B8] rounded-xl shadow-premium-lg text-sm text-[#1B262C] animate-in slide-in-from-right duration-300 flex items-center gap-2">
         <span>{toastMessage.message}</span>
       </div>
     );
   };
 
   return (
-    <footer className="relative bg-[#0a0a0f] border-t border-[rgba(79,70,229,0.15)] mt-12 overflow-visible">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4f46e5] to-transparent opacity-30"></div>
+    // ===== FOOTER MATCHING CARD COLORS =====
+    <footer className="relative bg-white rounded-2xl border border-[#BBE1FA] shadow-premium mt-12 overflow-visible">
+      {/* Top Accent Bar - Same as Cards */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1B262C] via-[#0F4C75] to-[#3282B8] rounded-t-2xl"></div>
       
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#4f46e5] rounded-full filter blur-3xl opacity-5 pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#7c3aed] rounded-full filter blur-3xl opacity-5 pointer-events-none"></div>
+      {/* Decorative Glows */}
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#3282B8]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#0F4C75]/5 rounded-full filter blur-3xl pointer-events-none"></div>
 
       <ToastNotification />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           
-          {/* Brand Column */}
+          {/* ===== BRAND COLUMN ===== */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] p-2.5 rounded-xl shadow-lg shadow-[#4f46e5]/25">
+              <div className="gradient-accent p-2.5 rounded-xl shadow-lg shadow-[#0F4C75]/25">
                 <GiScales className="text-white text-2xl" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-[#4f46e5] via-[#7c3aed] to-[#06b6d4] bg-clip-text text-transparent">
-                  JurisFlow
+                <h2 className="text-2xl font-bold text-[#1B262C]">
+                  Juris<span className="text-[#3282B8]">Flow</span>
                 </h2>
-                <p className="text-[10px] text-gray-500 font-medium tracking-wider uppercase">Legal Case Management</p>
+                <p className="text-[10px] text-[#3282B8] font-medium tracking-wider uppercase">Legal Case Management</p>
               </div>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">
+            
+            <p className="text-sm text-[#6B7280] leading-relaxed">
               Empowering legal professionals with cutting-edge case management solutions. 
               Streamline your workflow and deliver exceptional results.
             </p>
+            
+            {/* ===== SOCIAL ICONS WITH BRAND COLORS ON HOVER ===== */}
             <div className="flex items-center gap-2 pt-2 flex-wrap">
               {socialLinks.map((social, index) => (
                 <a
@@ -517,18 +527,35 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`p-2.5 text-gray-400 ${social.color} hover:bg-[rgba(79,70,229,0.1)] rounded-xl transition-all duration-200 hover:scale-110`}
+                  className="p-2.5 text-[#9CA3AF] rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#0F4C75]/20 group relative flex items-center justify-center"
+                  style={{
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = social.brandColor;
+                    e.currentTarget.style.backgroundColor = social.brandColor + '15';
+                    e.currentTarget.style.boxShadow = `0 8px 24px ${social.brandColor}30`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#9CA3AF';
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
                   aria-label={social.label}
                 >
-                  <social.icon className="text-lg" />
+                  <social.icon className="text-lg transition-all duration-300" />
+                  {/* Tooltip */}
+                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[8px] text-[#1B262C] bg-white border border-[#BBE1FA] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                    {social.label}
+                  </span>
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* ===== QUICK LINKS ===== */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+            <h3 className="text-sm font-semibold text-[#3282B8] uppercase tracking-wider mb-4">Quick Links</h3>
             <ul className="space-y-2.5">
               {quickLinks.map((link, index) => {
                 const isActive = activePage === link.path;
@@ -537,10 +564,10 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
                     <button
                       onClick={() => handleNavigation(link.path)}
                       className={`text-sm transition-colors flex items-center gap-2.5 group w-full text-left ${
-                        isActive ? 'text-[#818cf8]' : 'text-gray-400 hover:text-[#818cf8]'
+                        isActive ? 'text-[#3282B8]' : 'text-[#6B7280] hover:text-[#3282B8]'
                       }`}
                     >
-                      <link.icon className={`text-xs ${isActive ? 'text-[#4f46e5]' : 'text-gray-500'}`} />
+                      <link.icon className={`text-xs ${isActive ? 'text-[#3282B8]' : 'text-[#9CA3AF]'}`} />
                       {link.label}
                     </button>
                   </li>
@@ -549,27 +576,27 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* ===== SUPPORT ===== */}
           <div className="relative support-section">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Support</h3>
+            <h3 className="text-sm font-semibold text-[#3282B8] uppercase tracking-wider mb-4">Support</h3>
             <ul className="space-y-2.5">
               {supportLinks.map((link, index) => (
                 <li key={index} className="relative">
                   <button
                     onClick={() => handleSupportClick(link.action)}
                     className={`text-sm transition-colors flex items-center gap-2.5 group w-full text-left ${
-                      activeSupport === link.action ? 'text-[#818cf8]' : 'text-gray-400 hover:text-[#818cf8]'
+                      activeSupport === link.action ? 'text-[#3282B8]' : 'text-[#6B7280] hover:text-[#3282B8]'
                     }`}
                   >
-                    <link.icon className="text-xs text-gray-500" />
+                    <link.icon className="text-xs text-[#9CA3AF]" />
                     {link.label}
                     {link.status === 'online' && (
-                      <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                      <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-[#22C55E]/20 text-[#22C55E] rounded-full flex items-center gap-1 border border-[#22C55E]/30">
+                        <span className="w-1.5 h-1.5 bg-[#22C55E] rounded-full animate-pulse"></span>
                         Online
                       </span>
                     )}
-                    <FaExternalLinkAlt className="text-[8px] text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <FaExternalLinkAlt className="text-[8px] text-[#9CA3AF] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                   <SupportDetail action={link.action} />
                 </li>
@@ -577,21 +604,21 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
             </ul>
           </div>
 
-          {/* Legal Section */}
+          {/* ===== LEGAL ===== */}
           <div className="relative legal-section">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Legal</h3>
+            <h3 className="text-sm font-semibold text-[#3282B8] uppercase tracking-wider mb-4">Legal</h3>
             <ul className="space-y-2.5">
               {legalLinks.map((link, index) => (
                 <li key={index} className="relative">
                   <button
                     onClick={() => handleLegalClick(link.action)}
                     className={`text-sm transition-colors flex items-center gap-2.5 group w-full text-left ${
-                      activeLegal === link.action ? 'text-[#818cf8]' : 'text-gray-400 hover:text-[#818cf8]'
+                      activeLegal === link.action ? 'text-[#3282B8]' : 'text-[#6B7280] hover:text-[#3282B8]'
                     }`}
                   >
-                    <link.icon className="text-xs text-gray-500" />
+                    <link.icon className="text-xs text-[#9CA3AF]" />
                     {link.label}
-                    <FaExternalLinkAlt className="text-[8px] text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <FaExternalLinkAlt className="text-[8px] text-[#9CA3AF] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                   <LegalDetail action={link.action} />
                 </li>
@@ -599,15 +626,15 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* ===== CONTACT ===== */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+            <h3 className="text-sm font-semibold text-[#3282B8] uppercase tracking-wider mb-4">Contact</h3>
             <ul className="space-y-2.5">
               {contactInfo.map((item, index) => (
-                <li key={index} className="flex items-start gap-2.5 text-sm text-gray-400">
-                  <item.icon className="text-[#4f46e5] text-xs mt-0.5 flex-shrink-0" />
+                <li key={index} className="flex items-start gap-2.5 text-sm text-[#6B7280]">
+                  <item.icon className="text-[#3282B8] text-xs mt-0.5 flex-shrink-0" />
                   {item.link ? (
-                    <a href={item.link} className="hover:text-[#818cf8] transition-colors">
+                    <a href={item.link} className="hover:text-[#3282B8] transition-colors">
                       {item.text}
                     </a>
                   ) : (
@@ -622,7 +649,7 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
               {!showNewsletter ? (
                 <button 
                   onClick={() => setShowNewsletter(true)}
-                  className="w-full px-4 py-2 bg-[rgba(79,70,229,0.1)] text-[#818cf8] border border-[rgba(79,70,229,0.2)] rounded-xl hover:bg-[rgba(79,70,229,0.2)] transition-all duration-200 text-sm font-medium flex items-center justify-center gap-2 group"
+                  className="w-full px-4 py-2 bg-[#3282B8]/10 text-[#3282B8] border border-[#3282B8]/30 rounded-xl hover:bg-[#3282B8]/20 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-2 group"
                 >
                   <FaPaperPlane className="text-xs group-hover:translate-x-1 transition-transform" />
                   Subscribe to Newsletter
@@ -635,23 +662,23 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
                       placeholder="Enter your email"
                       value={newsletterEmail}
                       onChange={(e) => setNewsletterEmail(e.target.value)}
-                      className="flex-1 px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-lg text-white placeholder:text-gray-500 text-sm focus:border-blue-500 focus:outline-none transition-all"
+                      className="flex-1 px-3 py-2 bg-[#F0F4F8] border border-[#BBE1FA] rounded-lg text-[#1B262C] placeholder:text-[#9CA3AF] text-sm focus:border-[#3282B8] focus:ring-4 focus:ring-[#3282B8]/10 focus:outline-none transition-all"
                       required
                     />
                     <button
                       type="submit"
-                      className="px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+                      className="px-3 py-2 btn-primary rounded-lg text-sm font-medium"
                     >
                       Subscribe
                     </button>
                   </div>
                   {newsletterMessage && (
-                    <p className="text-xs text-emerald-400">{newsletterMessage}</p>
+                    <p className="text-xs text-[#22C55E]">{newsletterMessage}</p>
                   )}
                   <button
                     type="button"
                     onClick={() => setShowNewsletter(false)}
-                    className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                    className="text-xs text-[#6B7280] hover:text-[#3282B8] transition-colors"
                   >
                     Cancel
                   </button>
@@ -661,20 +688,20 @@ const Footer = ({ stats = {}, onNavigate, activePage }) => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-[rgba(255,255,255,0.05)]">
+        {/* ===== BOTTOM BAR ===== */}
+        <div className="mt-12 pt-8 border-t border-[#BBE1FA]/40">
           <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap justify-center">
+            <div className="flex items-center gap-2 text-sm text-[#6B7280] flex-wrap justify-center">
               <span>© {currentYear} JurisFlow. All rights reserved.</span>
-              <span className="text-gray-600">|</span>
+              <span className="text-[#BBE1FA]">|</span>
               <span className="flex items-center gap-1 text-xs">
-                Made with <FaHeart className="text-red-400 text-xs animate-pulse" /> by JurisFlow Team
+                Made with <FaHeart className="text-[#EF4444] text-xs animate-pulse" /> by JurisFlow Team
               </span>
             </div>
             
             <button
               onClick={scrollToTop}
-              className={`p-2.5 bg-[rgba(79,70,229,0.1)] hover:bg-[rgba(79,70,229,0.2)] text-[#818cf8] rounded-xl transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-[#4f46e5]/20 ${
+              className={`p-2.5 gradient-accent text-white rounded-xl transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-[#0F4C75]/30 ${
                 showBackToTop ? 'opacity-100' : 'opacity-50'
               }`}
               title="Back to top"
